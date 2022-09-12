@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
 
 //#region для красоты кода,чтоб модно было сварачивать
@@ -58,13 +59,22 @@ namespace StudentsApp
                 //без учёта регистра|| сравнииваем значение ввода Equals
                 if (command.ToLower().Equals("exit"))
                 {
-
+                    //закрываем соединение, если оно открыто
+                    if (sqlConnection.State == ConnectionState.Open)
+                    {
+                        sqlConnection.Close();
+                    }
+                    //закрываемм чтеца
+                    if (sqlDataReader != null)
+                    {
+                        sqlDataReader.Close();
+                    }
+                    break;// выкинет из while
                 }
-
-
             }
 
 
+            Console.WriteLine("Для продолжения нажмите любую клавишу ... ");
             Console.ReadKey();
         }
     }
