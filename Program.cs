@@ -9,7 +9,7 @@ using System.Configuration;
 using System.Data;
 
 
-//#region для красоты кода,чтоб модно было сварачивать
+//#region для красоты кода,чтоб модно было сварачивать/
 #region
 
 /* User Manual
@@ -58,7 +58,7 @@ namespace StudentsApp
                     Console.Write("> ");
                     command = Console.ReadLine();
 
-
+                    
                     //Exit
                     //без учёта регистра|| сравнииваем значение ввода Equals
                     if (command.ToLower().Equals("exit"))
@@ -149,8 +149,8 @@ namespace StudentsApp
                             break;
                         case "sortby":
 
-                            //sortby fio asc | dec
-                            // сократим команду,            [1] - имя колонки , [2]- параметр asc | dec
+                            //sortby fio asc | desc
+                            // сократим команду,            [1] - имя колонки , [2]- параметр asc | desc
                             sqlCommand = new SqlCommand($"SELECT * FROM [Students] ORDER BY {commandArray[1]} {commandArray[2]}", sqlConnection);
 
                             sqlDataReader = sqlCommand.ExecuteReader();
@@ -177,6 +177,13 @@ namespace StudentsApp
                             {
                                 sqlDataReader.Close();
                             }
+
+                            break;
+                        case "clear":
+                            sqlCommand = new SqlCommand(command, sqlConnection);
+
+                            Console.Clear();
+                            Console.WriteLine("Пространство ОЧИЩЕННО!");
 
                             break;
                         default:
