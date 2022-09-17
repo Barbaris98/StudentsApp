@@ -41,7 +41,7 @@ namespace StudentsApp
             sqlConnection.Open();
 
 
-            Console.WriteLine("StudentsApp");
+            Console.WriteLine("<START StudentsApp> " + "| Для справки введите  help | " + "| Для выхода введите  exit |");
 
             //4
             SqlDataReader sqlDataReader = null;
@@ -159,7 +159,6 @@ namespace StudentsApp
                             // и возвращает булевое значение когда уже вся таблицв прочитана 
                             while (sqlDataReader.Read())
                             {
-
                                 // к Ридеру обращаемся по идексатору , те [ID] и тд
                                 Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
                                     $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
@@ -169,9 +168,8 @@ namespace StudentsApp
 
 
                                 Console.WriteLine(new string('-', 30));
-
-
                             }
+
                             //закроем чтеца и потом его по коду заного создадим
                             if (sqlDataReader != null)
                             {
@@ -186,9 +184,67 @@ namespace StudentsApp
                             Console.WriteLine("Пространство ОЧИЩЕННО!");
 
                             break;
+
+                        case "search":
+
+                            if (commandArray[1].Equals("fio"))
+                            {
+                                //   в %%- это у нас...что такое
+                                sqlCommand = new SqlCommand($"SELECT * FROM [Students] WHERE FIO LIKE N'%{commandArray[2]}%'", sqlConnection);
+
+                            }
+                            else if (commandArray[1].Equals("birthday"))
+                            {
+                                sqlCommand = new SqlCommand($"SELECT * FROM [Students] WHERE Birthday='{commandArray[2]}'", sqlConnection);
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("Команда НЕ корректна!");
+                            }
+
+                            try
+                            {
+                                sqlDataReader = sqlCommand.ExecuteReader();
+
+                                while (sqlDataReader.Read())
+                                {
+                                    Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                        $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
+                                        $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
+                                        $"{sqlDataReader["Averange_score"]}");
+
+                                    Console.WriteLine(new string('-', 30));
+                                }
+
+                            }
+                            catch(Exception ex)
+                            {
+                                Console.WriteLine($"Ошибка: {ex.Message}");
+                            }
+                            finally
+                            {
+                                //закроем чтеца
+                                if (sqlDataReader != null)
+                                {
+                                    sqlDataReader.Close();
+                                }
+                            }
+
+
+                            break;
+                        case "help":
+                            
+                            Console.WriteLine("Доступные команды: "
+                                + "\n" + "     select"
+                                + "\n" + "     insert"
+                                + "\n" + "     update"
+                                + "\n" + "     delete"
+                                + "\n" + "     sortby (команда |SELECT * FROM [Students] ORDER BY| ставится авт-ки, используй сразу |sortby fio asc|)");
+                            break;
                         default:
 
-                            Console.WriteLine($"Команда  {command}  некорректна!");
+                            Console.WriteLine($"Команда  {command}  некорректна!" + "Для справки введите  help ");
 
                             break;
                     }
