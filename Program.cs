@@ -233,6 +233,39 @@ namespace StudentsApp
 
 
                             break;
+                        // ... для того чтобы выводить результат этих 4-ёх команд
+                        // нам Ридеры не понадобятся т.к у нас будет лишь
+                        // одно значение возвращенно.
+                        case "min":
+
+                            sqlCommand = new SqlCommand("SELECT MIN(Averange_score) FROM [Students]", sqlConnection);
+
+                            //  $ - форматированнный, он же "красивый" вывод
+                            //                      ExecuteScalar() - возвращает одно какое-то значение
+                            Console.WriteLine($"Минимальный средний балл: {sqlCommand.ExecuteScalar()}");
+
+                            break;
+                        case "max":
+
+                            sqlCommand = new SqlCommand("SELECT MAX(Averange_score) FROM [Students]", sqlConnection);
+
+                            Console.WriteLine($"Максимальный средний балл: {sqlCommand.ExecuteScalar()}");
+
+                            break;
+                        case "avg":
+
+                            sqlCommand = new SqlCommand("SELECT AVG(Averange_score) FROM [Students]", sqlConnection);
+
+                            Console.WriteLine($"Среднее значение по колонке 'Средний балл' : {sqlCommand.ExecuteScalar()}");
+
+                            break;
+                        case "sum":
+
+                            sqlCommand = new SqlCommand("SELECT SUM(Averange_score) FROM [Students]", sqlConnection);
+
+                            Console.WriteLine($"Сумма средних баллов : {sqlCommand.ExecuteScalar()}");
+
+                            break;
                         case "help":
                             
                             Console.WriteLine("Доступные команды: "
