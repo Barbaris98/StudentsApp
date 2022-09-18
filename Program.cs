@@ -216,6 +216,8 @@ namespace StudentsApp
                             Console.WriteLine($"Удалено: {sqlCommand.ExecuteNonQuery()} строк(а)");
 
                             break;
+
+                        case "fsortby":
                         case "sortby":
 
                             //sortby fio asc | desc
@@ -228,21 +230,34 @@ namespace StudentsApp
                             // и возвращает булевое значение когда уже вся таблицв прочитана 
                             while (sqlDataReader.Read())
                             {
-                                // к Ридеру обращаемся по идексатору , те [ID] и тд
-                                Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                result += $"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
                                     $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
                                     $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
-                                    $"{sqlDataReader["Averange_score"]}");
+                                    $"{sqlDataReader["Averange_score"]}\n";
 
-
-
-                                Console.WriteLine(new string('-', 30));
+                                result += new string('-', 30) + "\n";
                             }
 
                             //закроем чтеца и потом его по коду заного создадим
                             if (sqlDataReader != null)
                             {
                                 sqlDataReader.Close();
+                            }
+
+                            Console.WriteLine(result);
+                            //запись в файл 
+                            if (commandArray[0][0] == 'f')
+                            {
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+                                }
                             }
 
                             break;
@@ -254,6 +269,7 @@ namespace StudentsApp
 
                             break;
 
+                        case "fsearch":
                         case "search":
 
                             if (commandArray[1].Equals("fio"))
@@ -278,12 +294,12 @@ namespace StudentsApp
 
                                 while (sqlDataReader.Read())
                                 {
-                                    Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
-                                        $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
-                                        $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
-                                        $"{sqlDataReader["Averange_score"]}");
+                                    result += $"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                    $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
+                                    $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
+                                    $"{sqlDataReader["Averange_score"]}\n";
 
-                                    Console.WriteLine(new string('-', 30));
+                                    result += new string('-', 30) + "\n";
                                 }
 
                             }
@@ -298,6 +314,24 @@ namespace StudentsApp
                                 {
                                     sqlDataReader.Close();
                                 }
+
+                                Console.WriteLine(result);
+
+
+                                if (commandArray[0][0] == 'f')
+                                {
+                                    using (StreamWriter sW = new StreamWriter(
+                                        $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                        true, Encoding.UTF8))
+                                    {
+                                        sW.WriteLine(DateTime.Now.ToString());
+
+                                        sW.WriteLine(command);
+
+                                        sW.WriteLine(result);
+                                    }
+                                }
+
                             }
 
 
@@ -305,34 +339,103 @@ namespace StudentsApp
                         // ... для того чтобы выводить результат этих 4-ёх команд
                         // нам Ридеры не понадобятся т.к у нас будет лишь
                         // одно значение возвращенно.
+                        case "fmin":
                         case "min":
 
                             sqlCommand = new SqlCommand("SELECT MIN(Averange_score) FROM [Students]", sqlConnection);
 
                             //  $ - форматированнный, он же "красивый" вывод
                             //                      ExecuteScalar() - возвращает одно какое-то значение
-                            Console.WriteLine($"Минимальный средний балл: {sqlCommand.ExecuteScalar()}");
+                            //Console.WriteLine($"Минимальный средний балл: {sqlCommand.ExecuteScalar()}");
+
+                            result = $"Минимальный средний балл: {sqlCommand.ExecuteScalar()}";
+                            Console.WriteLine(result);
+                            if (commandArray[0][0] == 'f')
+                            {
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+                                }
+                            }
 
                             break;
+                        case "fmax":
                         case "max":
 
                             sqlCommand = new SqlCommand("SELECT MAX(Averange_score) FROM [Students]", sqlConnection);
+                            
+                            //Console.WriteLine($"Максимальный средний балл: {sqlCommand.ExecuteScalar()}");
 
-                            Console.WriteLine($"Максимальный средний балл: {sqlCommand.ExecuteScalar()}");
+                            result = $"Максимальный средний балл: {sqlCommand.ExecuteScalar()}";
+                            Console.WriteLine(result);
+
+                            if (commandArray[0][0] == 'f')
+                            {
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+                                }
+                            }
 
                             break;
+                        case "favg":
                         case "avg":
 
                             sqlCommand = new SqlCommand("SELECT AVG(Averange_score) FROM [Students]", sqlConnection);
 
-                            Console.WriteLine($"Среднее значение по колонке 'Средний балл' : {sqlCommand.ExecuteScalar()}");
+                            result = $"Среднее значение по колонке 'Средний балл' : {sqlCommand.ExecuteScalar()}";
+                            Console.WriteLine(result);
+
+                            if (commandArray[0][0] == 'f')
+                            {
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+                                }
+                            }
 
                             break;
+                        case "fsum":
                         case "sum":
 
                             sqlCommand = new SqlCommand("SELECT SUM(Averange_score) FROM [Students]", sqlConnection);
 
-                            Console.WriteLine($"Сумма средних баллов : {sqlCommand.ExecuteScalar()}");
+                            //Console.WriteLine($"Сумма средних баллов : {sqlCommand.ExecuteScalar()}");
+
+                            result = $"Сумма средних баллов : {sqlCommand.ExecuteScalar()}";
+                            Console.WriteLine(result);
+
+                            if (commandArray[0][0] == 'f')
+                            {
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+                                }
+                            }
 
                             break;
                         case "help":
@@ -357,9 +460,10 @@ namespace StudentsApp
                     Console.WriteLine($"Ошибка: {ex.Message}");
                 }
 
+                //очищаеам result перед каждой новой итерацией
+                result = string.Empty;
+
             }
-
-
 
             Console.WriteLine("Для продолжения нажмите любую клавишу ... ");
             Console.ReadKey();
