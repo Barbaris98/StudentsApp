@@ -14,8 +14,19 @@ using System.IO;
 #region
 
 /* User Manual
-     1.Выход exit
-
+     1. Выход exit                                      exit
+     2. Вывод всех строк                                selestall
+     2.1 Запрос к БД                                    SELECT * FROM Students 
+     3. Сортировка                                      sortby <column> <asc/desc>
+     4. Поиск                                           search <column> <text>
+     5. Минимальное значение колонки " Средний бал "    min
+     6. Максимальное значение колонки " Средний бал "   max
+     7. Среднее значение колонки " Средний бал "        avg
+     8. Сумма значений колонки " Средний бал "          sum
+     9. Очистка экрана                                  clear
+     10. Удаление                                       DELETE FROM <table_name> WHERE <condition>
+     11. Добавление                                     INSERT [INTO] <имя_таблицы> [(список_столбцов)] VALUES (значение1, значениеN)
+     12. Редактирование/Изменене                        UPDATE <имя_таблицы> SET <имя_столбца> = <значение> WHERE condition
 
 */
 #endregion
@@ -34,6 +45,34 @@ namespace StudentsApp
         //сделаем их static чтоб работать со static методом Main
         private static SqlConnection sqlConnection = null;
 
+        private static string command = string.Empty;
+
+        private static string result = string.Empty;
+
+        private static string[] commandArray;
+
+        private static void WriteToFile()
+        {
+            // первый параметр у new StreamWriter() - передаём путь куда будем сохранять файл
+            //AppDomain.CurrentDomain.BaseDirectory - обращаемся
+            // к баззовой директории, т.е там где наш exe., там будем сохранять
+            // через слэш "/" указывем имя файла в виде: команжа + время сохраниения
+            // DateTime.Now.ToString().Replace(':', '-')} приводим к строке и заменяем двоеточие на тире Replace(':', '-')
+            // true - булевое значение,это типо говорит о том что мы доб данные в файл
+            // Encoding.UTF8 - кодровка стандартная 
+            using (StreamWriter sW = new StreamWriter(
+                $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                true, Encoding.UTF8))
+            {
+                sW.WriteLine(DateTime.Now.ToString());
+
+                sW.WriteLine(command);
+
+                sW.WriteLine(result);
+
+            }
+        }
+
 
         static void Main(string[] args)
         {
@@ -50,9 +89,10 @@ namespace StudentsApp
             //5 строка в которой будут храиться вводимые значения
             // от пользователя ???? что такое string.Empty???
             //Empty - типо пустая
-            string command = string.Empty;
+            //string command = string.Empty;
+            //string result = string.Empty; ВЫНЕСЕМ ИХ И СДЕАЕМ НОРМ МЕТОД ДЛЯ УМЕНЬШ КОДА
 
-            string result = string.Empty; 
+
 
             while (true)
             {
@@ -88,7 +128,7 @@ namespace StudentsApp
                     //НЕТ Split- разбивает строку на подстроки , начиная с нулевого эл-та массива
                     //
 
-                    string[] commandArray = command.ToLower().Split(' ');
+                    commandArray = command.ToLower().Split(' ');
 
                     switch (commandArray[0])
                     {
@@ -171,24 +211,7 @@ namespace StudentsApp
                             // далее к нулевому индексу/символу нулевой строки т.е commandArray[0][0]
                             if (commandArray[0][0] == 'f')
                             {
-                                // первый параметр у new StreamWriter() - передаём путь куда будем сохранять файл
-                                //AppDomain.CurrentDomain.BaseDirectory - обращаемся
-                                // к баззовой директории, т.е там где наш exe., там будем сохранять
-                                // через слэш "/" указывем имя файла в виде: команжа + время сохраниения
-                                // DateTime.Now.ToString().Replace(':', '-')} приводим к строке и заменяем двоеточие на тире Replace(':', '-')
-                                // true - булевое значение,это типо говорит о том что мы доб данные в файл
-                                // Encoding.UTF8 - кодровка стандартная 
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-
-                                }
+                                WriteToFile();
                             }
                             
 
@@ -248,16 +271,7 @@ namespace StudentsApp
                             //запись в файл 
                             if (commandArray[0][0] == 'f')
                             {
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-                                }
+                                WriteToFile();
                             }
 
                             break;
@@ -320,16 +334,7 @@ namespace StudentsApp
 
                                 if (commandArray[0][0] == 'f')
                                 {
-                                    using (StreamWriter sW = new StreamWriter(
-                                        $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                        true, Encoding.UTF8))
-                                    {
-                                        sW.WriteLine(DateTime.Now.ToString());
-
-                                        sW.WriteLine(command);
-
-                                        sW.WriteLine(result);
-                                    }
+                                    WriteToFile();
                                 }
 
                             }
@@ -352,16 +357,7 @@ namespace StudentsApp
                             Console.WriteLine(result);
                             if (commandArray[0][0] == 'f')
                             {
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-                                }
+                                WriteToFile();
                             }
 
                             break;
@@ -377,16 +373,7 @@ namespace StudentsApp
 
                             if (commandArray[0][0] == 'f')
                             {
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-                                }
+                                WriteToFile();
                             }
 
                             break;
@@ -400,16 +387,7 @@ namespace StudentsApp
 
                             if (commandArray[0][0] == 'f')
                             {
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-                                }
+                                WriteToFile();
                             }
 
                             break;
@@ -425,16 +403,7 @@ namespace StudentsApp
 
                             if (commandArray[0][0] == 'f')
                             {
-                                using (StreamWriter sW = new StreamWriter(
-                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
-                                    true, Encoding.UTF8))
-                                {
-                                    sW.WriteLine(DateTime.Now.ToString());
-
-                                    sW.WriteLine(command);
-
-                                    sW.WriteLine(result);
-                                }
+                                WriteToFile();
                             }
 
                             break;
