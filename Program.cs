@@ -7,6 +7,7 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.IO;
 
 
 //#region для красоты кода,чтоб модно было сварачивать/
@@ -48,8 +49,10 @@ namespace StudentsApp
 
             //5 строка в которой будут храиться вводимые значения
             // от пользователя ???? что такое string.Empty???
+            //Empty - типо пустая
             string command = string.Empty;
 
+            string result = string.Empty; 
 
             while (true)
             {
@@ -93,7 +96,6 @@ namespace StudentsApp
 
                             sqlCommand = new SqlCommand(command, sqlConnection);
 
-
                             //ExecuteReader() - ??
                             // sqlDataReader здесь будет возвращать нам двумерный массив
                             // m на n ячкек
@@ -110,10 +112,7 @@ namespace StudentsApp
                                     $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
                                     $"{sqlDataReader["Averange_score"]}");
 
-
-
                                 Console.WriteLine(new string('-', 30));
-
 
                             }
                             //закроем чтеца и потом его по коду заного создадим
@@ -122,6 +121,76 @@ namespace StudentsApp
                                 sqlDataReader.Close();
                             }
 
+                            break;
+
+                        case "fselectall":// case "fselect": указывает на case "select", который буде выполняться...
+                        case "selectall":
+
+                            sqlCommand = new SqlCommand("SELECT * FROM [Students]", sqlConnection);
+
+
+                            //ExecuteReader() - ??
+                            // sqlDataReader здесь будет возвращать нам двумерный массив
+                            // m на n ячкек
+                            sqlDataReader = sqlCommand.ExecuteReader();
+
+                            //Read() перемещает sqlDataReader к следующей записи/строке
+                            // и возвращает булевое значение когда уже вся таблицв прочитана 
+                            while (sqlDataReader.Read())
+                            {
+                                // к Ридеру обращаемся по идексатору , те [ID] и тд
+                                /*Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                    $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
+                                    $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
+                                    $"{sqlDataReader["Averange_score"]}");
+
+
+
+                                Console.WriteLine(new string('-', 30));
+                                */
+
+                                // += -это значит вешаем результат на переменну, или присваиваем???
+                                result += $"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                    $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
+                                    $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
+                                    $"{sqlDataReader["Averange_score"]}\n";
+
+                                result += new string('-', 30) + "\n";
+
+                            }
+
+                            if (sqlDataReader != null)
+                            {
+                                sqlDataReader.Close();
+                            }
+
+                            Console.WriteLine(result);
+
+                            //здесь мы обращаемся к нулевому индексу массива
+                            //, вводмых нами на клавиатуры, строк commandArray[0] . 
+                            // далее к нулевому индексу/символу нулевой строки т.е commandArray[0][0]
+                            if (commandArray[0][0] == 'f')
+                            {
+                                // первый параметр у new StreamWriter() - передаём путь куда будем сохранять файл
+                                //AppDomain.CurrentDomain.BaseDirectory - обращаемся
+                                // к баззовой директории, т.е там где наш exe., там будем сохранять
+                                // через слэш "/" указывем имя файла в виде: команжа + время сохраниения
+                                // DateTime.Now.ToString().Replace(':', '-')} приводим к строке и заменяем двоеточие на тире Replace(':', '-')
+                                // true - булевое значение,это типо говорит о том что мы доб данные в файл
+                                // Encoding.UTF8 - кодровка стандартная 
+                                using (StreamWriter sW = new StreamWriter(
+                                    $"{AppDomain.CurrentDomain.BaseDirectory}/{commandArray[0]}_{DateTime.Now.ToString().Replace(':', '-')}.txt",
+                                    true, Encoding.UTF8))
+                                {
+                                    sW.WriteLine(DateTime.Now.ToString());
+
+                                    sW.WriteLine(command);
+
+                                    sW.WriteLine(result);
+
+                                }
+                            }
+                            
 
                             break;
                         case "insert":
