@@ -8,8 +8,21 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Diagnostics;
+
+/*
+ЧТО МОЖНО ЕЩЁ ОБАВИТЬ:
+
+добась типо некоторые шаблоны упражений, н-р: ввёл команду тренер1
+и тебе вышло написатьтакойто запрос или типо того (см ур мих.фленов)
+
+откалибруй более информативное отображение справки 
+
+Воспользуйся фунционалом класса Proces и  им , по комадне открывай пдф файл с инструкцией 
+и рассказом о программе и авторе, будет круто, если это добавишь
 
 
+*/
 //#region для красоты кода,чтоб модно было сварачивать/
 #region
 
@@ -410,12 +423,20 @@ namespace StudentsApp
                         case "help":
                             
                             Console.WriteLine("Доступные команды: "
+                                + "\n" + "     helpFile"
                                 + "\n" + "     select"
                                 + "\n" + "     insert"
                                 + "\n" + "     update"
                                 + "\n" + "     delete"
                                 + "\n" + "     sortby (команда |SELECT * FROM [Students] ORDER BY| ставится авт-ки, используй сразу |sortby fio asc|)");
                             break;
+
+                        case "helpfile":
+
+                            Process.Start(@"C:\Users\user\source\repos\StudentsApp\Spravka.docx");
+
+                            break;
+
                         default:
 
                             Console.WriteLine($"Команда  {command}  некорректна!" + "Для справки введите  help ");
