@@ -19,7 +19,7 @@ using System.Diagnostics;
 откалибруй более информативное отображение справки 
 
 Воспользуйся фунционалом класса Proces и  им , по комадне открывай пдф файл с инструкцией 
-и рассказом о программе и авторе, будет круто, если это добавишь
+и рассказом о программе и авторе, будет круто, если это добавишь --СДЕЛАЛ!
 
 
 */
@@ -160,7 +160,7 @@ namespace StudentsApp
                             {
 
                                 // к Ридеру обращаемся по идексатору , те [ID] и тд
-                                Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                Console.WriteLine($"{sqlDataReader["Id"]} {sqlDataReader["FIO"]} " +
                                     $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
                                     $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
                                     $"{sqlDataReader["Averange_score"]}");
@@ -203,7 +203,7 @@ namespace StudentsApp
                                 */
 
                                 // += -это значит вешаем результат на переменну, или присваиваем???
-                                result += $"{sqlDataReader["Id"]} {sqlDataReader["FIO"]}" +
+                                result += $"{sqlDataReader["Id"]} {sqlDataReader["FIO"]} " +
                                     $"{sqlDataReader["Birthday"]} {sqlDataReader["Universuty"]}" +
                                     $"{sqlDataReader["Group_number"]} {sqlDataReader["Course"]}" +
                                     $"{sqlDataReader["Averange_score"]}\n";
@@ -425,10 +425,40 @@ namespace StudentsApp
                             Console.WriteLine("Доступные команды: "
                                 + "\n" + "     helpFile"
                                 + "\n" + "     select"
-                                + "\n" + "     insert"
+                                + "\n" + "     insert(дата в американском форате(месяц.день.год))"
                                 + "\n" + "     update"
                                 + "\n" + "     delete"
                                 + "\n" + "     sortby (команда |SELECT * FROM [Students] ORDER BY| ставится авт-ки, используй сразу |sortby fio asc|)");
+                            break;
+                        //транажёрные команды 
+                        case "task1":
+
+                            Console.WriteLine("Выполните : "
+                                + "\n" + "     1) Выведите таблицу Students"
+                                + "\n" + "     2) Дабавьте ещё 3-ёх студенов в таблицу, все 3 студента должны учиться на 3-м курсе"
+                                + "\n" + "     3) Найдите средний бал у всех студентов"
+                                + "\n" + "     4) Найдите студентов которые усаться на 4-ом курсе"
+                                + "\n" + "     5) Удилите студента с наименьшим средним баллом"
+                                + "\n" + "     6) Удилите студента с наименьшим средним баллом, который учится на 3-м курсе"
+                                + "\n" + "     7) Выведите таблицу Students"
+                                );
+                           
+                            break;
+
+                        case "task2":
+
+                            Console.WriteLine("Выполните : "
+                                + "\n" + "     1) Создайте таблицу Product с наим. столбцов: id, price, count, art(н-р:5264)"
+                                + "\n" + "     2) Заполните 4-6 строк в таблице"
+                                + "\n" + "     3) Найдите самый дорогой товар"
+                                + "\n" + "     4) Найдите самое большое кол-во товара"
+                                + "\n" + "     5) Измените цену у которого count больше всех, для стимулиции продаж"
+                                + "\n" + "     6) Симметировть рост продаж товара (уменьшить count у товара из пред. пункта)"
+                                + "\n" + "     7) Удалите товар с самой высокой ценой"
+                                + "\n" + "     редним баллом, который учится на 3-м курсе"
+                                + "\n" + "     8) Выведите таблицу Product"
+                                );
+
                             break;
 
                         case "helpfile":
